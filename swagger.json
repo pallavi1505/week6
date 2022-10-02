@@ -1,0 +1,271 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Student API Documentation",
+      "description": "Student Project API"
+    },
+    "host": "137.184.99.247:5000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Agentshttp://137.184.99.247/",
+        "description": "API for students in the system"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/students": {
+        "get": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Get all students in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Create new student in system",
+          "parameters": [
+            {
+              "name": "student",
+              "in": "body",
+              "description": "Students data that we want to create",
+              "schema": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "New student is created",
+              "schema": {
+                "$ref": "#/definitions/Students"
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Update details of the student that we wish to update",
+          "tags": [
+            "Students"
+          ],
+          "parameters": [
+            {
+              "name": "student",
+              "in": "body",
+              "description": "Student with new values of properties",
+              "schema": {
+                "$ref": "#/definitions/UpdateStudent"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Student is updated",
+              "schema": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          }
+        },
+        "patch": {
+          "summary": "Student age with for given student id",
+          "tags": [
+            "Students"
+          ],
+          "parameters": [
+            {
+              "name": "agent",
+              "in": "body",
+              "description": "Student age with for given student id",
+              "schema": {
+                "$ref": "#/definitions/PatchStudent"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Student is updated",
+              "schema": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Students"
+          ],
+          "summary": "Delete student with given student id",
+          "parameters": [
+            {
+              "name": "student_id",
+              "in": "body",
+              "description": "Student is deleted",
+              "schema": {
+                "$ref": "#/definitions/DeleteStudent"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Student is deleted"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Student": {
+        "required": [
+          "student_id",
+          "student_first_name",
+          "student_last_name",
+          "age",
+          "gender"
+        ],
+        "properties": {
+          "student_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "student_first_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "student_last_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "age": {
+            "type": "integer",
+            "uniqueItems": false
+          },
+          "gender": {
+            "type": "string",
+            "uniqueItems": false
+          }
+        }
+      },
+      "UpdateStudent": {
+        "required": [
+          "student_id",
+          "student_first_name",
+          "student_last_name",
+          "age",
+          "gender"
+        ],
+        "properties": {
+          "student_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "student_first_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "student_last_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "age": {
+            "type": "integer",
+            "uniqueItems": false
+          },
+          "gender": {
+            "type": "string",
+            "uniqueItems": false
+          }
+        }
+      },
+      "PatchStudent": {
+        "required": [
+          "student_id",
+          "student_first_name",
+          "student_last_name",
+          "age",
+          "gender"
+        ],
+        "properties": {
+          "student_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "student_first_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "student_last_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "age": {
+            "type": "integer",
+            "uniqueItems": false
+          },
+          "gender": {
+            "type": "string",
+            "uniqueItems": false
+          }
+        }
+      },
+      "DeleteStudent": {
+        "required": [
+          "student_id",
+          "student_first_name",
+          "student_last_name",
+          "age",
+          "gender"
+        ],
+        "properties": {
+          "student_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "student_first_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "student_last_name": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "age": {
+            "type": "integer",
+            "uniqueItems": false
+          },
+          "gender": {
+            "type": "string",
+            "uniqueItems": false
+          }
+        }
+      },
+      "Students": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Student"
+        }
+      }
+    }
+}
