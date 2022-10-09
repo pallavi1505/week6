@@ -67,6 +67,7 @@ app.get('/students', async function(req,res){
 const {
     validateAgent
 } = require('./helper/validator');
+const { json } = require('express');
 
 /**
  * @swagger
@@ -208,15 +209,27 @@ app.delete('/students',body('student_id').isNumeric().notEmpty(),async function(
 });
 
 //week 7 assignment
-app.get('/say',(req, res) => {
-   const keyword = req.body.keyword;
-   if(keyword != undefined || keyword!="")
-   {
-        axios.get('https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-b0815861-ca69-4b22-be2c-bbc0de1c26d4/default/say?keyword=', { params: { keyword:keyword  } })
-        .then(data => res.status(200).json(data))
-        .catch(err => next(err));
-   }
-})
+app.get('/say', async function(req,res){
+    try {
+        let newKeyword = req.query.keyword;
+        if(newKeyword === undefined || newKeyword ==="")
+        {
+            res.status(400).send("Please enter a keyword in the query")
+        }
+        else
+        {
+            // console.log("Keyword:"+newKeyword)
+            axios.get('https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-b0815861-ca69-4b22-be2c-bbc0de1c26d4/default/say?keyword='+newKeyword)
+            .then(resp => {
+                res.status(200).send(resp.data);
+            });
+        }
+    } catch (error) {
+        console
+        res.status(400).send(error.message)
+    }
+  });
+  
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
