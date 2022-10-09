@@ -7,6 +7,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerDocument = require('./swagger.json');
 const swaggerUI = require('swagger-ui-express');
 const cors= require('cors')
+const { body, validationResult } = require('express-validator');
 const app = express()
 
 dotenv.config({path: '.env-local'});
@@ -62,6 +63,9 @@ app.get('/students', async function(req,res){
   }
 });
 
+const {
+    validateAgent
+} = require('./helper/validator');
 
 /**
  * @swagger
@@ -83,9 +87,13 @@ app.get('/students', async function(req,res){
  *          '400':
  *              description: Bad request body
  */
-app.post('/students',async function(req,res){
+app.post('/students',body('student_id').isNumeric().notEmpty(),body('student_first_name').notEmpty(),
+body('student_last_name').notEmpty(),body('age').isNumeric(),body('gender').notEmpty(),async function(req,res){
     try {
-        console.log(req.body);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
         const sqlQuery = `INSERT INTO students VALUES (${req.body.student_id},"${req.body.student_first_name}","${req.body.student_last_name}",${req.body.age},"${req.body.gender}");`;
         const rows = await pool.query(sqlQuery);
         res.status(200).json(req.body);
@@ -114,8 +122,12 @@ app.post('/students',async function(req,res){
  *          '400':
  *              description: Bad request body
  */
-app.put('/students', async function(req,res){
+app.put('/students',body('student_id').isNumeric().notEmpty(),async function(req,res){
     try {   
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
     const sqlQuery = `UPDATE students SET age = "${req.body.age}", first_name = "${req.body.student_first_name}" ,last_name = "${req.body.student_last_name}" WHERE  student_id = "${req.body.student_id}";`
     const rows = await pool.query(sqlQuery);
     res.status(200).json(`User ${req.body.student_first_name} Successfully Updated`);
@@ -145,8 +157,12 @@ app.put('/students', async function(req,res){
  *          '400':
  *              description: Bad request body
  */
-app.patch('/students', async function(req,res){
+app.patch('/students',body('student_id').isNumeric().notEmpty(),async function(req,res){
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
     const sqlQuery = `UPDATE students SET age = "${req.body.age}" WHERE  student_id = "${req.body.student_id}";`
     const rows = await pool.query(sqlQuery);
 
@@ -176,8 +192,12 @@ app.patch('/students', async function(req,res){
  *          '400':
  *              description: Bad request body
  */
-app.delete('/students',async function(req,res){
+app.delete('/students',body('student_id').isNumeric().notEmpty(),async function(req,res){
   try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
       const sqlQuery = `DELETE FROM students WHERE student_id = "${req.body.student_id}";`;
       await pool.query(sqlQuery);
       res.status(200).json(`User ${req.body.student_first_name} Successfully Deleted`);
